@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<title>دار بداية التعليمية — امتحان الممنوع من الصرف لعلة واحدة (نسخة خضراء نهائية)</title>
+<style>
+:root{
+  /* Green educational theme with warm accents (same as base) */
+  --bg1:#f4fbf6;
+  --panel:#ffffff;
+  --green-prim:#1f7a59; /* primary emerald */
+  --green-soft:#2fa67a;
+  --accent:#b88a25; /* gold accent */
+  --muted:#657667;
+  --text:#21312a;
+  --danger:#e15741;
+  --whatsappStart:#25D366; --whatsappEnd:#128C7E;
+  --btn-h:50px;
+  --input-width:72%;
+}
+*{box-sizing:border-box}
+html,body{height:100%; margin:0; font-family: "Segoe UI", Tahoma, Arial, sans-serif; -webkit-font-smoothing:antialiased; background:var(--bg1); color:var(--text); -webkit-text-size-adjust:100%;}
+body{ display:flex; align-items:center; justify-content:center; padding:14px; overflow-x:hidden; }
+
+/* BACKGROUND: modern desk image + slow vertical float + golden overlay (soft) */
+.bg-wrap{ position:fixed; inset:0; z-index:-20; overflow:hidden; }
+.bg-image{
+  position:absolute; inset:-12% -6% -12% -6%;
+  background-image: url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2000&auto=format&fit=crop');
+  background-size:cover; background-position:center 20%;
+  filter: saturate(0.7) contrast(0.9) brightness(0.88);
+  transform-origin:center;
+  animation: bgFloat 20s ease-in-out infinite;
+}
+@keyframes bgFloat{ 0%{transform:translateY(-2%);}50%{transform:translateY(2%);}100%{transform:translateY(-2%);} }
+.bg-overlay{ position:absolute; inset:0; background: linear-gradient(180deg, rgba(246,250,246,0.6), rgba(245,247,244,0.6)); pointer-events:none; z-index:-10; }
+
+/* floating papers visual (no audio) */
+.papers{ position:fixed; inset:0; z-index:-15; pointer-events:none; }
+.paper{ position:absolute; width:140px; height:96px; border-radius:8px; background:linear-gradient(180deg,#fffefb,#f7fff3);
+  box-shadow:0 8px 26px rgba(30,40,30,0.08); display:flex; align-items:center; justify-content:center; font-weight:800; color:#2f4b3e; opacity:0; transform-origin:center;
+  border:1px solid rgba(160,180,160,0.06);
+}
+.paper.p1{ left:6%; top:-22%; transform:rotate(-6deg) scale(1.05); }
+.paper.p2{ left:26%; top:-18%; transform:rotate(4deg) scale(1); }
+.paper.p3{ left:46%; top:-24%; transform:rotate(-3deg) scale(1.03); }
+.paper.p4{ left:66%; top:-20%; transform:rotate(5deg) scale(1); }
+.paper.p5{ left:82%; top:-18%; transform:rotate(-4deg) scale(1.02); }
+body.effects-on .paper{ animation: floatDown 8s linear infinite; opacity:1; }
+body.effects-on .paper.p2{ animation-delay:0.6s; } body.effects-on .paper.p3{ animation-delay:1.2s; } body.effects-on .paper.p4{ animation-delay:1.8s; } body.effects-on .paper.p5{ animation-delay:2.4s; }
+@keyframes floatDown{ 0%{ transform: translateY(-6vh) rotate(var(--r,0deg)) scale(var(--s,1)); opacity:0; } 8%{opacity:1;} 50%{ transform: translateY(40vh) rotate(calc(var(--r,0deg)+6deg)) scale(var(--s,1)); opacity:1; } 100%{ transform: translateY(80vh) rotate(calc(var(--r,0deg)+12deg)) scale(var(--s,1)); opacity:0; } }
+
+/* shimmer */
+.shimmer{ position:fixed; left:-30%; top:28%; width:28%; height:56%; transform:rotate(12deg); pointer-events:none; z-index:-5; opacity:0;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.95), rgba(255,255,255,0)); filter: blur(16px);
+}
+body.effects-on .shimmer{ animation: shimmerMove 10s ease-in-out infinite; opacity:0.9; }
+@keyframes shimmerMove{ 0%{ left:-40%; opacity:0 } 12%{ left:-12%; opacity:0.9 } 32%{ left:36%; opacity:0.25 } 100%{ left:140%; opacity:0 } }
+
+/* wrapper + card */
+.wrapper{ width:100%; max-width:980px; margin:0 auto; z-index:10; }
+.card{ background:var(--panel); border-radius:14px; padding:16px; box-shadow:0 14px 40px rgba(20,30,20,0.06); border:1px solid rgba(30,90,70,0.03); }
+
+/* Pages */
+.page{ display:none; padding-bottom:200px; }
+.page.active{ display:block; animation:fade .28s ease both; }
+@keyframes fade{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:none;} }
+
+/* header/title */
+.h1{ text-align:center; color:var(--green-prim); font-weight:900; font-size:28px; margin:6px 0; text-shadow:0 6px 18px rgba(47,122,92,0.06); }
+.h2{ text-align:center; color:var(--green-soft); font-weight:800; font-size:16px; margin:4px 0; }
+.lead{ text-align:center; color:var(--muted); margin:8px 0 12px; font-weight:700; }
+
+/* START HERO full distribution */
+.start-hero{ display:flex; flex-direction:column; align-items:center; justify-content:space-between; height:62vh; padding:12px 8px; }
+.start-top{text-align:center}
+.start-mid{text-align:center}
+.start-bottom{ width:100%; display:flex; justify-content:center; gap:14px; margin-bottom:6px; }
+
+/* Buttons */
+.btn{
+  display:inline-flex; align-items:center; justify-content:center; gap:8px; border:0; cursor:pointer; color:white;
+  padding:0 18px; height:var(--btn-h); border-radius:12px; font-size:15px; position:relative; overflow:hidden; min-width:140px;
+  background: linear-gradient(90deg, var(--green-soft), var(--green-prim));
+  box-shadow:0 12px 30px rgba(47,122,92,0.12);
+}
+.btn .shine{ position:absolute; top:-120%; left:-40%; width:40%; height:240%; transform: rotate(25deg); background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.96), rgba(255,255,255,0)); opacity:0; pointer-events:none;}
+.btn.shine .shine{ animation: btnShine .55s ease forwards; }
+@keyframes btnShine{ 0%{ left:-40%; opacity:0 } 40%{ opacity:0.95 } 100%{ left:140%; opacity:0 } }
+.btn.ghost{ background:transparent; color:var(--green-prim); border:1px solid rgba(47,122,92,0.12); box-shadow:none; }
+
+/* Login inputs (smaller) */
+.form{ display:flex; align-items:center; justify-content:center; flex-direction:column; gap:12px; }
+.input-with-icon{ position:relative; width:var(--input-width); min-width:220px; }
+.input-with-icon input{ width:100%; padding:10px 44px 10px 14px; height:44px; border-radius:10px; border:1px solid rgba(47,122,92,0.08); background: linear-gradient(180deg,#fff,#fbfff9); font-size:15px; color:var(--text); }
+.icon-inside{ position:absolute; top:50%; transform:translateY(-50%); left:10px; font-size:16px; opacity:0.9; }
+
+/* Exam header and question styles */
+.exam-head{ display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:10px; flex-wrap:wrap; }
+.exam-title{ font-weight:900; color:var(--green-prim); font-size:14px; }
+.exam-sub{ color:var(--muted); font-size:13px; }
+
+/* big title */
+.big-title{ text-align:center; margin:8px 0; font-weight:900; color:var(--green-prim); font-size:20px; }
+
+/* question card */
+.q-card{ border-radius:12px; padding:12px; margin-bottom:12px; border:1px solid rgba(47,122,92,0.06); box-shadow:0 8px 20px rgba(0,0,0,0.04); background: linear-gradient(180deg,#fff,#fbfff9); }
+.q-header{ font-weight:900; color:var(--green-soft); margin-bottom:6px; font-size:14px; }
+.q-text{ font-size:16px; margin-bottom:8px; color:var(--text); }
+
+/* options */
+.options{ display:flex; flex-direction:column; gap:8px; }
+.option{ display:flex; align-items:center; gap:10px; padding:10px; border-radius:10px; cursor:pointer; border:1px solid rgba(47,122,92,0.06); background:linear-gradient(180deg,#fff,#fbfff9); transition: transform .12s, box-shadow .12s; }
+.option:hover{ transform:translateY(-2px); box-shadow:0 8px 18px rgba(0,0,0,0.06); }
+.option input{ transform:scale(1.16); margin-left:8px; accent-color: var(--green-prim); }
+.option.selected{ border-color: rgba(47,122,92,0.2); box-shadow: 0 10px 24px rgba(47,122,92,0.06); background: linear-gradient(90deg, rgba(255,255,255,0.96), rgba(255,255,255,0.98)); }
+
+/* pager */
+.pager{ display:flex; flex-direction:column; align-items:center; gap:12px; margin-top:10px; }
+.pager-row{ display:flex; gap:12px; align-items:center; justify-content:center; width:100%; }
+.small-btn{ padding:0 14px; height:44px; font-size:14px; min-width:110px; border-radius:10px; }
+
+/* page4 result layout */
+.result-page .result-card{
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  padding:16px; border-radius:12px; background: linear-gradient(180deg, rgba(47,122,92,0.06), rgba(255,255,255,0.02));
+  border:1px solid rgba(47,122,92,0.08); box-shadow:0 12px 36px rgba(20,40,30,0.06);
+}
+.result-card .title{ font-weight:900; color:var(--green-prim); font-size:20px; }
+.result-card .sub{ color:var(--muted); font-weight:800; font-size:14px; }
+
+/* wrong list */
+.wrong-list{ margin-top:6px; text-align:right; width:100%; max-width:760px; }
+.wrong-item{ padding:10px; border-radius:10px; background:linear-gradient(180deg,#fff,#f8fff5); border:1px solid rgba(47,122,92,0.04); margin-bottom:8px; }
+
+/* toast & warn */
+.warn-bar{ position:fixed; top:-120px; left:0; right:0; margin:auto; width:100%; max-width:980px; background:linear-gradient(90deg,var(--danger),#ff8a45); color:white; padding:12px 14px; border-radius:10px; text-align:center; box-shadow:0 12px 30px rgba(255,107,53,0.18); z-index:9999; transition: top .35s ease; font-weight:900; font-size:14px; }
+
+/* whatsapp global bottom */
+.whatsapp-global{ position:fixed; bottom:12px; left:50%; transform:translateX(-50%); z-index:9999; background: linear-gradient(90deg,var(--whatsappStart),var(--whatsappEnd)); color:white; border-radius:999px; padding:10px 16px; display:flex; gap:10px; align-items:center; box-shadow:0 12px 36px rgba(18,140,126,0.22); text-decoration:none; font-weight:800; font-size:15px; }
+
+/* orientation lock */
+.orientation-lock{ position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:10050; display:none; align-items:center; justify-content:center; padding:18px; text-align:center; color:white; }
+.orientation-lock .box{ background:linear-gradient(180deg,#fff9f2,#fff4e6); color:var(--text); border-radius:12px; padding:18px; max-width:480px; box-shadow:0 18px 40px rgba(0,0,0,0.35); }
+
+/* responsive tweaks */
+@media (max-width:760px){
+  :root{ --input-width:86%; --btn-h:46px; }
+  .start-hero{ height:56vh; }
+  .paper{ width:120px; height:84px; }
+}
+</style>
+</head>
+<body>
+
+<!-- background -->
+<div class="bg-wrap" aria-hidden="true">
+  <div class="bg-image" id="bgImage"></div>
+  <div class="bg-overlay"></div>
+</div>
+
+<!-- visual papers -->
+<div class="papers" id="papers" aria-hidden="true">
+  <div class="paper p1" style="--r:-6deg; --s:1.05">أ + ب + ج</div>
+  <div class="paper p2" style="--r:4deg; --s:1.0">📘</div>
+  <div class="paper p3" style="--r:-3deg; --s:1.03">✒️</div>
+  <div class="paper p4" style="--r:5deg; --s:1.0">قواعد</div>
+  <div class="paper p5" style="--r:-4deg; --s:1.02">📖</div>
+</div>
+
+<!-- shimmer -->
+<div class="shimmer" id="shimmer" aria-hidden="true"></div>
+
+<!-- orientation lock -->
+<div class="orientation-lock" id="orientLock" aria-hidden="true">
+  <div class="box"><h3>📲 الرجاء إعادة الهاتف للوضع العمودي</h3><p>مثبت للعمل في الوضع العمودي فقط.</p></div>
+</div>
+
+<!-- warn -->
+<div id="warnBar" class="warn-bar" aria-hidden="true">تحذير</div>
+
+<div class="wrapper" id="app">
+  <!-- PAGE 1: Intro -->
+  <div class="card page active" id="pageIntro">
+    <div class="start-hero">
+      <div class="start-top">
+        <div class="h1">دار بداية التعليمية</div>
+        <div class="h2">إعداد: أ/ محمد إسماعيل الجندي</div>
+      </div>
+      <div class="start-mid">
+        <div class="lead"><strong>امتحان الممنوع من الصرف — لعلة واحدة</strong></div>
+        <div style="margin-top:8px; font-size:14px; color:var(--muted)">10 أسئلة — متنوع (اختيار من متعدد / صح/خطأ / إكمال)</div>
+      </div>
+      <div class="start-bottom">
+        <button id="btnToLogin" class="btn full" aria-label="ابدأ الامتحان"><span class="shine"></span>ابدأ الامتحان</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 2: Login -->
+  <div class="card page" id="pageLogin" aria-hidden="true">
+    <h2 style="margin-top:6px; text-align:center; color:var(--green-prim)">تسجيل دخول الطالب</h2>
+    <form id="loginForm" class="form" onsubmit="return false;">
+      <div class="input-with-icon">
+        <span class="icon-inside">👤</span>
+        <input id="studentName" type="text" placeholder="اكتب اسمك هنا" autocomplete="name" />
+      </div>
+      <div class="input-with-icon">
+        <span class="icon-inside">🔑</span>
+        <input id="studentCode" type="text" placeholder="اكتب كودك هنا" autocomplete="off" />
+      </div>
+      <div style="width:100%; display:flex; gap:8px; justify-content:center; margin-top:8px">
+        <button id="btnLogin" class="btn" style="min-width:180px"><span class="shine"></span>ابدأ الاختبار</button>
+      </div>
+      <div style="text-align:center; margin-top:10px">
+        <button id="btnBackIntro" class="btn ghost" style="min-width:120px">عودة</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- PAGE 3: Exam -->
+  <div class="card page" id="pageExam" aria-hidden="true">
+    <div class="exam-head">
+      <div>
+        <div class="exam-title">دار بداية التعليمية — أ/ محمد إسماعيل الجندي</div>
+        <div class="exam-sub">امتحان: الممنوع من الصرف لعلة واحدة</div>
+      </div>
+      <div style="text-align:left;">
+        <div id="showStudentName" style="font-weight:900; color:var(--green-soft); font-size:14px">اسم الطالب</div>
+        <div id="showStudentCode" style="color:var(--muted); font-size:13px">الكود</div>
+      </div>
+    </div>
+
+    <div class="big-title">الأسئلة</div>
+    <div id="questionsArea"></div>
+
+    <!-- pager: prev/next only (عرض النتيجة مُحذوف من هنا) -->
+    <div class="pager">
+      <div class="pager-row" id="pagerRow1">
+        <button id="prevQ" class="btn ghost small-btn">السابق</button>
+        <button id="nextQ" class="btn ghost small-btn">التالي</button>
+      </div>
+      <div style="height:12px;"></div>
+      <div class="pager-row" id="pagerRow2">
+        <button id="gotoResultBtn" class="btn gold small-btn" style="min-width:160px; display:inline-block; background: linear-gradient(90deg,var(--accent), #b07a1a);">عرض النتيجة</button>
+        <button id="pageWhatsBtn" class="btn whats small-btn" style="min-width:140px">واتساب</button>
+      </div>
+      <div style="margin-top:10px;" class="progress" id="progressText">السؤال 1 من 10</div>
+    </div>
+  </div>
+
+  <!-- PAGE 4: Result / Review -->
+  <div class="card page result-page" id="pageResult" aria-hidden="true">
+    <div style="text-align:center; margin-bottom:8px;">
+      <div class="h1" style="margin-bottom:6px;">نتيجة الامتحان</div>
+      <div class="h2">مراجعة الأخطاء وتحميل النتيجة</div>
+    </div>
+
+    <div class="result-card" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+      <div class="title" id="resName">الطالب — الكود</div>
+      <div class="sub" id="resScoreText">الدرجة: 0 / 10 — 0%</div>
+      <div id="resEncourage" style="font-weight:800; color:var(--green-prim)"></div>
+
+      <div style="width:100%; max-width:760px; margin-top:12px; text-align:right;">
+        <div style="font-weight:900; margin-bottom:8px; color:var(--green-prim)">قائمة الأخطاء</div>
+        <div class="wrong-list" id="wrongList">
+          <!-- items injected here -->
+        </div>
+      </div>
+
+      <div style="display:flex; gap:12px; margin-top:14px;">
+        <button id="downloadResultBtn" class="btn" style="min-width:160px"><span class="shine"></span>تحميل صورة النتيجة</button>
+        <button id="whatsappResultBtn" class="btn whats" style="min-width:160px">مشاركة بالواتساب</button>
+      </div>
+      <div style="margin-top:10px; color:var(--muted); font-weight:700; font-size:13px;">يمكنك تحميل البطاقة ومشاركتها مباشرة</div>
+    </div>
+  </div>
+</div>
+
+<!-- global whatsapp -->
+<a id="whatsappGlobal" class="whatsapp-global" href="https://wa.me/201020706978" target="_blank" rel="noopener">تواصل عبر واتساب</a>
+
+<!-- html2canvas CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" crossorigin="anonymous"></script>
+
+<script>
+/* ================= AUDIO: professional soft button click + success chime ================= */
+const AudioClass = window.AudioContext || window.webkitAudioContext;
+let audioCtx = null;
+function ensureAudio() {
+  if(!audioCtx){
+    try{ audioCtx = new AudioClass(); }catch(e){ audioCtx = null; }
+  }
+  if(audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+}
+
+/* professional soft click: two quick partial tones for a warm click */
+function playButtonSound(){
+  ensureAudio();
+  if(!audioCtx) return;
+  const now = audioCtx.currentTime;
+  const o1 = audioCtx.createOscillator(), g1 = audioCtx.createGain();
+  const o2 = audioCtx.createOscillator(), g2 = audioCtx.createGain();
+  o1.type = 'sine'; o2.type = 'sine';
+  o1.frequency.setValueAtTime(900, now); o2.frequency.setValueAtTime(1300, now + 0.02);
+  g1.gain.setValueAtTime(0.0001, now); g2.gain.setValueAtTime(0.0001, now);
+  g1.gain.linearRampToValueAtTime(0.045, now + 0.006); g2.gain.linearRampToValueAtTime(0.03, now + 0.01);
+  g1.gain.exponentialRampToValueAtTime(0.0001, now + 0.12); g2.gain.exponentialRampToValueAtTime(0.0001, now + 0.12);
+  o1.connect(g1); g1.connect(audioCtx.destination);
+  o2.connect(g2); g2.connect(audioCtx.destination);
+  o1.start(now); o2.start(now + 0.02);
+  o1.stop(now + 0.13); o2.stop(now + 0.13);
+}
+
+/* gentle success chime */
+function playSuccess(){
+  ensureAudio();
+  if(!audioCtx) return;
+  const now = audioCtx.currentTime;
+  const o1 = audioCtx.createOscillator(), g1 = audioCtx.createGain();
+  const o2 = audioCtx.createOscillator(), g2 = audioCtx.createGain();
+  o1.type='sine'; o2.type='sine';
+  o1.frequency.setValueAtTime(880, now); o2.frequency.setValueAtTime(1320, now);
+  g1.gain.setValueAtTime(0.0001, now); g2.gain.setValueAtTime(0.0001, now);
+  o1.connect(g1); o2.connect(g2); g1.connect(audioCtx.destination); g2.connect(audioCtx.destination);
+  g1.gain.linearRampToValueAtTime(0.08, now+0.005); g2.gain.linearRampToValueAtTime(0.08, now+0.01);
+  o1.start(now); o2.start(now+0.02);
+  o1.frequency.exponentialRampToValueAtTime(660, now+0.18); o2.frequency.exponentialRampToValueAtTime(990, now+0.18);
+  g1.gain.exponentialRampToValueAtTime(0.0001, now+0.42); g2.gain.exponentialRampToValueAtTime(0.0001, now+0.42);
+  o1.stop(now+0.44); o2.stop(now+0.44);
+}
+
+/* ================= Element refs ================= */
+const pageIntro = document.getElementById('pageIntro');
+const pageLogin = document.getElementById('pageLogin');
+const pageExam = document.getElementById('pageExam');
+const pageResult = document.getElementById('pageResult');
+const btnToLogin = document.getElementById('btnToLogin');
+const btnLogin = document.getElementById('btnLogin');
+const btnBackIntro = document.getElementById('btnBackIntro');
+const prevQ = document.getElementById('prevQ');
+const nextQ = document.getElementById('nextQ');
+const gotoResultBtn = document.getElementById('gotoResultBtn');
+const pageWhatsBtn = document.getElementById('pageWhatsBtn');
+const whatsappGlobal = document.getElementById('whatsappGlobal');
+const questionsArea = document.getElementById('questionsArea');
+const progressText = document.getElementById('progressText');
+const showStudentName = document.getElementById('showStudentName');
+const showStudentCode = document.getElementById('showStudentCode');
+const warnBar = document.getElementById('warnBar');
+const papers = document.getElementById('papers');
+
+/* result refs */
+const resName = document.getElementById('resName');
+const resScoreText = document.getElementById('resScoreText');
+const resEncourage = document.getElementById('resEncourage');
+const wrongList = document.getElementById('wrongList');
+const downloadResultBtn = document.getElementById('downloadResultBtn');
+const whatsappResultBtn = document.getElementById('whatsappResultBtn');
+
+/* bind button effects and sound */
+function bindButtonsSound(){
+  document.querySelectorAll('.btn').forEach(btn=>{
+    btn.addEventListener('pointerdown', ()=>{ btn.classList.add('shine'); setTimeout(()=>btn.classList.remove('shine'),620); });
+    btn.addEventListener('click', ()=>{ playButtonSound(); });
+  });
+}
+bindButtonsSound();
+
+/* show page helper */
+function showPage(el){
+  [pageIntro,pageLogin,pageExam,pageResult].forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+/* ================= Codes configuration (same as base) ================= */
+/* 20 student codes (4 digits) */ 
+const allowedCodes = ["1023","1458","1769","1822","1945","2010","2233","2378","2491","2654","2717","2889","2942","3016","3127","3255","3379","3490","3564","3688"];
+const teacherCode = "1997"; // unlimited teacher
+function getUsedCodes(){ try{ const v=localStorage.getItem('usedExamCodes'); return v?JSON.parse(v):[]; }catch(e){ return []; } }
+function addUsedCode(code){ try{ const arr=getUsedCodes(); if(!arr.includes(code)){ arr.push(code); localStorage.setItem('usedExamCodes', JSON.stringify(arr)); } }catch(e){} }
+
+/* warn bar display */
+let warnTimeout = null;
+function showWarn(msg){
+  warnBar.textContent = msg || 'تحذير'; warnBar.style.top='12px'; warnBar.setAttribute('aria-hidden','false');
+  if(warnTimeout) clearTimeout(warnTimeout);
+  warnTimeout = setTimeout(()=>{ warnBar.style.top='-120px'; warnBar.setAttribute('aria-hidden','true'); }, 2500);
+}
+
+/* ================= Questions bank (10 diverse) for "الممنوع من الصرف لعلّة واحدة" ================= */
+/*
+Types used:
+- mcq: multiple choice (options array)
+- tf: true/false (options 'صح'/'خطأ')
+- fill: text input (acceptedAnswers array)
+
+Note: سؤالان (الرابع والتاسع) تم استبدالهما بالأسئلة الجديدة المطلوبة.
+*/
+const questionBank = [
+  { type:'mcq', q:'أيٌ من الكلمات التالية يُعدُّ ممنوعًا من الصرف لعلة واحدة؟', options:['علي','سلمى','كتاب','بيت'], correct:'سلمى' },
+  { type:'mcq', q:'أيٌّ من الكلمات التالية مثال على صيغة منتهى الجموع (ممنوع من الصرف)؟', options:['مصابيح','كتب','مدارس','طالب'], correct:'مصابيح' },
+  { type:'tf', q:'الاسم "حسناء" ممنوع من الصرف لعلة واحدة (صح/خطأ).', correct:'صح' },
+  /* === تم الاستبدال: السؤال الرابع الجديد (ألف التأنيث الممدودة) === */
+  { type:'mcq', q:'أي الكلمات التالية تُمنع من الصرف لأنها منتهية بألف التأنيث الممدودة؟', options:['ليلى','صحراء','سلمى'], correct:'صحراء' },
+  { type:'mcq', q:'الاسم "قناديل" يندرج تحت أي حالة من حالات المنع من الصرف؟', options:['صيغة منتهى الجموع','اسم علم أعجمي','جمع تكسير','فعل'], correct:'صيغة منتهى الجموع' },
+  { type:'tf', q:'الأسماء المنتهية بألف التأنيث الممدودة مثل "صحراء" ممنوعة من الصرف لعلة واحدة. (صح/خطأ)', correct:'صح' },
+  { type:'mcq', q:'أي من الكلمات التالية ليست ممنوعة من الصرف لعلة واحدة؟', options:['علي','حسناء','مصابيح','سلمى'], correct:'علي' },
+  { type:'fill', q:'ما سبب منع الاسم "مصابيح" من الصرف؟ اكتب عبارة قصيرة توضح السبب:', accepted:['لأنها صيغة منتهى الجموع','لأنها صيغة منتهى الجموع','صيغة منتهى الجموع','صيغة منتهى الجمع'] },
+  /* === تم الاستبدال: السؤال التاسع الجديد (وزن "أفعل") === */
+  { type:'mcq', q:'من الكلمات التالية الممنوعة من الصرف لأنها على وزن "أفعل" الذي مؤنثه "فعلاء":', options:['أفضل','رجل','مدرسة'], correct:'أفضل' },
+  { type:'tf', q:'الممنوع من الصرف لعلّة واحدة لا يقبل التنوين عادة. (صح/خطأ)', correct:'صح' }
+];
+
+function shuffle(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+
+/* build question DOM */
+let userAnswers = new Array(questionBank.length).fill(null);
+let currentIndex = 0;
+let currentUsedCode = '';
+let isTeacher = false;
+
+function buildQuestions(){
+  questionsArea.innerHTML=''; userAnswers = new Array(questionBank.length).fill(null); currentIndex = 0;
+  const palette = ['#f6fff6','#f6fff8','#f4fff9','#f6fff6','#f7fff6','#f5fff7','#f6fff5','#f7fff6','#f6fff4','#f7fff7'];
+  questionBank.forEach((item, idx)=>{
+    const card = document.createElement('div'); card.className='q-card'; card.id = 'q'+idx;
+    card.style.background = `linear-gradient(135deg, ${palette[idx%palette.length]}, #fff)`;
+    const header = document.createElement('div'); header.className='q-header'; header.innerText = `السؤال ${idx+1}`;
+    const qtext = document.createElement('div'); qtext.className='q-text'; qtext.innerText = item.q;
+    const optsDiv = document.createElement('div'); optsDiv.className='options';
+
+    if(item.type === 'mcq'){
+      const opts = shuffle([...item.options]);
+      opts.forEach(opt=>{
+        const lbl = document.createElement('label'); lbl.className='option';
+        const inp = document.createElement('input'); inp.type='radio'; inp.name = `q${idx}`; inp.value = opt;
+        inp.addEventListener('change', ()=>{
+          userAnswers[idx] = opt;
+          optsDiv.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
+          lbl.classList.add('selected');
+          updateProgressText();
+        });
+        const span = document.createElement('div'); span.style.flex='1'; span.style.fontWeight='800'; span.innerText = opt;
+        lbl.appendChild(inp); lbl.appendChild(span); optsDiv.appendChild(lbl);
+      });
+    } else if(item.type === 'tf'){
+      ['صح','خطأ'].forEach(opt=>{
+        const lbl = document.createElement('label'); lbl.className='option';
+        const inp = document.createElement('input'); inp.type='radio'; inp.name = `q${idx}`; inp.value = opt;
+        inp.addEventListener('change', ()=>{
+          userAnswers[idx] = opt;
+          optsDiv.querySelectorAll('.option').forEach(o=>o.classList.remove('selected'));
+          lbl.classList.add('selected');
+          updateProgressText();
+        });
+        const span = document.createElement('div'); span.style.flex='1'; span.style.fontWeight='800'; span.innerText = opt;
+        lbl.appendChild(inp); lbl.appendChild(span); optsDiv.appendChild(lbl);
+      });
+    } else if(item.type === 'fill'){
+      const inpDiv = document.createElement('div'); inpDiv.style.display='flex'; inpDiv.style.gap='8px'; inpDiv.style.alignItems='center';
+      const inp = document.createElement('input'); inp.type='text'; inp.placeholder='اكتب إجابتك هنا'; inp.style.width='100%'; inp.style.padding='10px'; inp.style.borderRadius='8px'; inp.style.border='1px solid rgba(47,122,92,0.08)';
+      inp.addEventListener('input', ()=>{ userAnswers[idx] = inp.value.trim(); updateProgressText(); });
+      inpDiv.appendChild(inp); optsDiv.appendChild(inpDiv);
+    }
+
+    card.appendChild(header); card.appendChild(qtext); card.appendChild(optsDiv);
+    questionsArea.appendChild(card);
+  });
+
+  showQuestion(0); updateProgressText();
+}
+
+function showQuestion(i){
+  if(i < 0) i = 0; if(i >= questionBank.length) i = questionBank.length-1; currentIndex = i;
+  for(let k=0;k<questionBank.length;k++){ const el = document.getElementById('q'+k); if(!el) continue; el.style.display = (k===i)?'block':'none'; }
+  updateProgressText();
+}
+function updateProgressText(){ progressText.textContent = `السؤال ${currentIndex+1} من ${questionBank.length}`; }
+
+/* navigation */
+prevQ.addEventListener('click', ()=>{ playButtonSound(); showQuestion(currentIndex-1); });
+nextQ.addEventListener('click', ()=>{ playButtonSound(); showQuestion(currentIndex+1); });
+
+/* PAGE controls */
+btnToLogin.addEventListener('click', ()=>{ playButtonSound(); startEffects(); showPage(pageLogin); });
+btnBackIntro.addEventListener('click', (e)=>{ e.preventDefault(); playButtonSound(); showPage(pageIntro); });
+
+/* LOGIN handling */
+btnLogin.addEventListener('click', (e)=>{
+  e.preventDefault(); playButtonSound();
+  const name = document.getElementById('studentName').value.trim();
+  const code = document.getElementById('studentCode').value.trim();
+  if(!name || !code){ showWarn('الرجاء إدخال الاسم والكود'); return; }
+
+  if(code === teacherCode){
+    isTeacher = true; currentUsedCode = teacherCode;
+    showStudentName.textContent = name + ' (المعلم)';
+    showStudentCode.textContent = teacherCode;
+    buildQuestions(); showPage(pageExam); return;
+  }
+
+  if(!allowedCodes.includes(code)){ showWarn('هذا الكود غير مصرح به'); return; }
+  const used = getUsedCodes();
+  if(used.includes(code)){ showWarn('هذا كود تم استخدامه من قبل ولا يمكن إعادة الامتحان'); return; }
+
+  isTeacher = false; currentUsedCode = code;
+  showStudentName.textContent = name; showStudentCode.textContent = code;
+  buildQuestions(); showPage(pageExam);
+});
+
+/* GOTO RESULT button: only allow if all questions answered */
+gotoResultBtn.addEventListener('click', ()=>{
+  playButtonSound();
+  const unanswered = []; for(let i=0;i<questionBank.length;i++){
+    const val = userAnswers[i];
+    if(val === null || val === undefined || (typeof val==='string' && val.trim()==='')) unanswered.push(i+1);
+  }
+  if(unanswered.length>0){
+    showWarn(`أجب على جميع الأسئلة أولاً. تبقى ${unanswered.length} سؤالاً`); return;
+  }
+  // All answered -> compute and show pageResult
+  computeAndShowResult();
+});
+
+/* page-level whatsapp (fallback) */
+pageWhatsBtn.addEventListener('click', ()=>{ window.open(whatsappGlobal.href, '_blank'); });
+
+/* scoring utilities for fill-ins: normalize Arabic simple */
+function normalizeArabic(s){
+  if(!s) return '';
+  return s.replace(/[\u064B-\u0652]/g,'') // remove diacritics
+           .replace(/[إأآا]/g,'ا')
+           .replace(/ى/g,'ي')
+           .replace(/ؤ/g,'و')
+           .replace(/ئ/g,'ي')
+           .replace(/ة/g,'ه')
+           .replace(/\s+/g,' ')
+           .trim()
+           .toLowerCase();
+}
+
+/* compute results, build wrong-list and move to pageResult */
+function computeAndShowResult(){
+  let score = 0; const wrongs = [];
+  for(let i=0;i<questionBank.length;i++){
+    const q = questionBank[i];
+    const ans = userAnswers[i] || '';
+    let ok = false;
+
+    if(q.type === 'mcq' || q.type === 'tf'){
+      ok = (ans === q.correct);
+    } else if(q.type === 'fill'){
+      const normAns = normalizeArabic(ans);
+      const accepts = (q.accepted || []).map(a=>normalizeArabic(a));
+      if(accepts.includes(normAns)) ok = true;
+      else {
+        // lenient check: contains keyword
+        for(const a of accepts){ if(a.length>2 && normAns.includes(a)){ ok = true; break; } }
+      }
+    }
+
+    if(ok) score++;
+    else {
+      wrongs.push({
+        index: i+1,
+        question: q.q,
+        your: ans || 'لم تُجب',
+        correct: (q.type==='fill') ? (q.accepted ? q.accepted[0] : '—') : q.correct
+      });
+    }
+  }
+
+  const pct = Math.round((score/questionBank.length)*100);
+  // update result page content
+  resName.textContent = `${showStudentName.textContent || 'الطالب'} — ${currentUsedCode || showStudentCode.textContent || ''}`;
+  resScoreText.textContent = `الدرجة: ${score} / ${questionBank.length} — ${pct}%`;
+  // encouragement
+  let enc = '';
+  if(pct >= 90) enc = '🌟 ممتاز جدًا! استمر بهذا الأداء الرائع.';
+  else if(pct >= 70) enc = '👍 جيد جدًا! عمل جيد، حافظ على المذاكرة.';
+  else if(pct >= 50) enc = '🙂 جيد — يحتاج بعض المراجعة لتحسين النتيجة.';
+  else enc = '💪 لا تقلق! اعد المحاولة وركز على النقاط الخاطئة وستتحسن.';
+  resEncourage.textContent = enc;
+
+  // build wrong list
+  wrongList.innerHTML = '';
+  if(wrongs.length === 0){
+    const ok = document.createElement('div'); ok.className = 'wrong-item'; ok.style.textAlign='center'; ok.innerText = 'لا توجد أخطاء — إجابة ممتازة!';
+    wrongList.appendChild(ok);
+  } else {
+    wrongs.forEach(w=>{
+      const item = document.createElement('div'); item.className = 'wrong-item';
+      item.innerHTML = `<div style="font-weight:900; color:var(--green-prim)">السؤال ${w.index}</div>
+        <div style="margin-top:6px; font-weight:800;">${w.question}</div>
+        <div style="margin-top:6px; color:#b33;">إجابتك: <strong>${w.your}</strong></div>
+        <div style="margin-top:4px; color:var(--green-prim)">الإجابة الصحيحة: <strong>${w.correct}</strong></div>`;
+      wrongList.appendChild(item);
+    });
+  }
+
+  // mark code used (unless teacher)
+  if(!isTeacher && currentUsedCode) addUsedCode(currentUsedCode);
+
+  showPage(pageResult);
+
+  const summary = `${showStudentName.textContent} — ${currentUsedCode} - نتيجتي: ${score}/${questionBank.length} (${pct}%). ${enc}`;
+  whatsappGlobal.href = `https://wa.me/201020706978?text=${encodeURIComponent(summary)}`;
+  whatsappResultBtn.onclick = ()=> window.open(`https://wa.me/201020706978?text=${encodeURIComponent(summary)}`, '_blank');
+}
+
+/* download result card as image */
+downloadResultBtn.addEventListener('click', async ()=>{
+  playButtonSound();
+  const card = document.querySelector('.result-card');
+  if(!window.html2canvas){ showWarn('مكوّن حفظ الصورة غير متاح'); return; }
+  // render card to canvas
+  html2canvas(card, { backgroundColor:null, scale: Math.min(window.devicePixelRatio || 1.5, 2) })
+    .then(canvas=>{
+      const data = canvas.toDataURL('image/png');
+      const a = document.createElement('a'); a.href = data; a.download = `نتيجة_${(showStudentName.textContent||'الطالب').replace(/\s+/g,'_')}.png`; document.body.appendChild(a); a.click(); a.remove();
+      playSuccess();
+      showWarn('✅ تم حفظ الصورة بنجاح');
+    }).catch(err=>{ console.error(err); showWarn('تعذر تحويل النتيجة إلى صورة'); });
+});
+
+/* whatsapp share from result page */
+whatsappResultBtn.addEventListener('click', ()=>{
+  playButtonSound();
+  const summary = `${showStudentName.textContent} — ${currentUsedCode} - ${document.getElementById('resScoreText').textContent}.`;
+  window.open(`https://wa.me/201020706978?text=${encodeURIComponent(summary)}`, '_blank');
+});
+
+/* orientation lock (portrait only) */
+function checkOrientation(){
+  const isLandscape = window.matchMedia('(orientation: landscape)').matches;
+  const ol = document.getElementById('orientLock');
+  if(isLandscape){ ol.style.display='flex'; ol.setAttribute('aria-hidden','false'); document.getElementById('app').style.pointerEvents='none'; }
+  else { ol.style.display='none'; ol.setAttribute('aria-hidden','true'); document.getElementById('app').style.pointerEvents='auto'; }
+}
+checkOrientation();
+window.addEventListener('orientationchange', ()=> setTimeout(checkOrientation,220));
+window.addEventListener('resize', ()=> setTimeout(checkOrientation,220));
+
+/* start visual effects (papers + shimmer) after first interaction */
+let effectsStarted = false;
+function startEffects(){
+  if(effectsStarted) return;
+  effectsStarted = true;
+  document.body.classList.add('effects-on');
+  // no audio for papers; visual only
+}
+
+/* init */
+document.addEventListener('DOMContentLoaded', ()=>{
+  showPage(pageIntro);
+  // ensure inputs width
+  document.querySelectorAll('.input-with-icon input').forEach(i=>i.style.width='100%');
+});
+
+/* allow Enter to submit login */
+document.getElementById('loginForm').addEventListener('keydown', (e)=>{ if(e.key === 'Enter'){ e.preventDefault(); btnLogin.click(); } });
+
+</script>
+</body>
+</html>
